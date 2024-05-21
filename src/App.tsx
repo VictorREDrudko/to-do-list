@@ -1,63 +1,87 @@
 import React from 'react';
 import './App.css';
-import { TaskType, Todolist } from './components/Todolist';
+import { Todolist, taskType } from './components/Todolist';
 
 function App() {
-  const tasks1: Array<TaskType> = [
+
+  const tasks1: Array<taskType> = [
     {
-      id: 1,
-      title: "HTML5&CSS",
+      idTask: 1,
+      titleTask: "Monday",
+      isDone: true
+    },
+    {
+      idTask: 2,
+      titleTask: "Tuesday",
+      isDone: false
+    },
+    {
+      idTask: 3,
+      titleTask: "Wednesday",
+      isDone: false
+    },
+    {
+      idTask: 4,
+      titleTask: "Thursday",
+      isDone: false
+    },
+    {
+      idTask: 5,
+      titleTask: "Friday",
+      isDone: false
+    },
+    {
+      idTask: 6,
+      titleTask: "Saturday",
+      isDone: false
+    },
+    {
+      idTask: 7,
+      titleTask: "Sunday",
+      isDone: false
+    }
+  ]
+
+  const tasks2: Array<taskType> = [
+    {
+      idTask: 1,
+      titleTask: "HTML5&CSS",
       isDone: true,
     },
     {
-      id: 2,
-      title: "JS",
+      idTask: 2,
+      titleTask: "JS",
       isDone: true,
     },
     {
-      id: 3,
-      title: "ReactJS",
+      idTask: 3,
+      titleTask: "ReactJS",
       isDone: false,
     },
     {
-      id: 4,
-      title: "Redax",
+      idTask: 4,
+      titleTask: "Redax",
       isDone: false,
     },
     {
-      id: 5,
-      title: "Typescript",
+      idTask: 5,
+      titleTask: "Typescript",
       isDone: false,
     },
     {
-      id: 6,
-      title: "RTK query",
+      idTask: 6,
+      titleTask: "RTK query",
       isDone: false,
     },
   ]
 
-  const tasks2: Array<TaskType> = [
-    // {
-    //   id: 1,
-    //   title: "Hello world",
-    //   isDone: true,
-    // },
-    // {
-    //   id: 2,
-    //   title: "I'm happy",
-    //   isDone: false,
-    // },
-    // {
-    //   id: 3,
-    //   title: "Yooh",
-    //   isDone: false,
-    // },
-  ]
+  const tasks3: Array<taskType> = []
 
     return (
         <div className="App">
-          <Todolist title={"What to learn"} tasks={tasks1} date="21/04/2024"/>
-          <Todolist title={"Songs"} tasks={tasks2}/>
+          <Todolist title={"Training at the stadium"} tasks={tasks1} data={"20-26.05.2024"}/>
+          <Todolist title={"Web development technologies"} tasks={tasks2} data={"21.05.2024"}/>
+          <Todolist title={"New To Do List"} tasks={tasks3}/>
         </div>
     );
 }

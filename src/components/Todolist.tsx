@@ -1,84 +1,97 @@
 import styled from "styled-components"
 import { Button } from "./Button"
-import { InputItem } from "./InputItem"
 
-export type TaskType = {
-  id: number,
-  title: string,
-  isDone: boolean,
+export type taskType = {
+  idTask: number
+  titleTask: string,
+  isDone: boolean
 }
 
-type TodolistPropsType = {
+type TodolistType = {
   title: string
-  tasks: TaskType[]
-  date?: string
+  tasks: taskType[]
+  data?: string
 }
 
-//                       деструктурирующее присваивание
-export const Todolist = ({ title, tasks, date }: TodolistPropsType) => {
-
+export const Todolist = ({title, tasks, data}: TodolistType) => {
+  // Логика
+  const mappedTascs = tasks.map(el => {
+    return (
+      <ItemStyle key={el.idTask}>
+        <CheckboxStyle type='checkbox' checked={el.isDone}></CheckboxStyle>
+        {el.titleTask}
+      </ItemStyle>
+    )
+  })
+  
+  // Верстка (разметка)
   return (
     <TodolistStyle>
-      <TitleTodolist>{title}</TitleTodolist>
-      <InputItem/>
-      {tasks.length === 0 ? (<p>"No task"</p>) : (
-        <ItemWrapper>
-          {tasks.map((task) => {
-            // debugger
-            return (
-              <Item key={task.id}>
-                <input type="checkbox" checked={task.isDone}/> 
-                <span>{task.title}</span>
-              </Item>
-            )
-          })}
-        </ItemWrapper>
-      )}
-      <ButtonWrapper>
-          <Button title={"All"}/>
-          <Button title={"Active"}/>
-          <Button title={"Completed"}/>
-      </ButtonWrapper>
-      <div>{date}</div>
+      <TitleStyle>{title}</TitleStyle>
+      <div>
+        <InputStyle type="text" />
+        <Button titleBtn={"+"}/>
+      </div>
+      <ItemsStyle>
+        {tasks.length === 0 ? <div>No tasks</div> : mappedTascs}
+      </ItemsStyle>
+      <DataStyle>
+        <span>{data}</span>
+      </DataStyle>
+      <Button titleBtn={"All"}/>
+      <Button titleBtn={"Active"}/>
+      <Button titleBtn={"Completed"}/>
     </TodolistStyle>
   )
 }
 
+
 const TodolistStyle = styled.div`
-  background-color: #aafe93;
+  background-color: #f5d4fe;
   border-radius: 15px;
   padding: 10px;
-  border: 1px solid green;
-  box-shadow: 5px 5px 15px 3px rgba(1, 1, 1, 0.5);
+  border: 1px solid rgb(246, 168, 250);
+  box-shadow: 5px 5px 10px 3px rgba(127, 2, 134, 0.2);
 `
 
-const TitleTodolist = styled.h2`
+const TitleStyle = styled.h2`
+  max-width: 300px;
   font-size: 26px;
   font-weight: 600;
   text-align: center;
   font-family: 'Roboto';
   margin: 10px 0 20px;
-  color: #023f0e;
+  color: #510163;
 `
 
-const ButtonWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 5px;
-  margin: 15px 0;
+const InputStyle = styled.input`
+  height: 30px;
+  width: 200px;
+  border-radius: 10px;
+  margin-right: 10px;
+  padding: 0 10px;
+  font-size: 16px;
 `
 
-const ItemWrapper = styled.ul`
+const ItemsStyle = styled.ul`
+  margin: 20px 0;
   display: flex;
   flex-direction: column;
   gap: 5px;
   margin-bottom: 30px;
 `
 
-const Item = styled.li`
-  color: #023f0e;
-  
-  & span {
-    margin-left: 10px;
-  }
+const ItemStyle = styled.li`
+  font-size: 18px;
+`
+
+const CheckboxStyle = styled.input`
+  height: 15px;
+  width: 15px;
+  margin-right: 10px;
+`
+
+const DataStyle = styled.div`
+  margin-bottom: 10px;
+  font-size: 12px;
 `

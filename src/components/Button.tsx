@@ -1,27 +1,27 @@
 import styled from "styled-components"
 
-type ButtonPropsType = {
-  title: string
+type ButtonType = {
+  titleBtn: string
 }
 
-export const Button = ({ title } : ButtonPropsType) => {
+export const Button = ({titleBtn}: ButtonType) => {
   return (
-    <ButtonStyled>{title}</ButtonStyled>
+    <ButtonStyled>{titleBtn}</ButtonStyled>
   )
 }
 
 const ButtonStyled = styled.button`
   padding: 5px;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
-  background-color: #f9fcf9;
-  color: #023f0e;
-  min-width: 50px;
+  background-color: #d67efc;
+  color: #2c2c2c;
+  min-width: 40px;
+  margin-right: 10px;
   font-family: 'Roboto';
   transition: all 0.5s;
 
   &:hover {
-    background-color: #cffb88;
-    color: green;
+    background-color: #ebbdff;
   }
 `
