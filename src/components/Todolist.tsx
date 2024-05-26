@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import { useState } from "react"
 import { Button } from "./Button"
+import { Input } from "./Input"
 
 // *******************ТИПИЗАЦИЯ****************************
 // типизация объекта Todolist (task)
@@ -26,6 +27,7 @@ export const Todolist = ({title, tasks, data, deleteTask}: TodolistType) => {
   // *********************ЛОГИКА***************************
   // ЛОКАЛЬНЫЙ useState
   const [filter, setFilter] = useState<filteringOption>("all");
+  const [textInput, setTextInput] = useState<string>("");
 
   // Функция выбора типа фильтрации
   const changeFilter = (filter: filteringOption) => {
@@ -52,7 +54,7 @@ export const Todolist = ({title, tasks, data, deleteTask}: TodolistType) => {
     return (
       <ItemStyle key={el.idTask}>
         <CheckboxStyle type='checkbox' defaultChecked={el.isDone}></CheckboxStyle>
-        {el.titleTask}
+        <span>{el.titleTask}</span>
         <Button titleBtn="X" callbackBtn={()=> deleteTask(el.idTask)}/>
       </ItemStyle>
     )
@@ -63,6 +65,10 @@ export const Todolist = ({title, tasks, data, deleteTask}: TodolistType) => {
    return (
     <TodolistStyle>
       <TitleStyle>{title}</TitleStyle>
+      <InputWrapperStyle>
+        <Input textInput={textInput} setTextInput={setTextInput}/>
+        <Button titleBtn={"+"} callbackBtn={()=>{}}/>
+      </InputWrapperStyle>
       <ItemsStyle>
         {tasks.length === 0 ? <div>No tasks</div> : mappedTasks}
       </ItemsStyle>
@@ -78,11 +84,27 @@ export const Todolist = ({title, tasks, data, deleteTask}: TodolistType) => {
 
   // *********************СТИЛИ***************************
 const TodolistStyle = styled.div`
-  background-color: #f5d4fe;
+  background-color: #e1e1e1;
   border-radius: 15px;
   padding: 10px;
-  border: 1px solid rgb(246, 168, 250);
-  box-shadow: 5px 5px 10px 3px rgba(127, 2, 134, 0.2);
+  border: 1px solid rgb(172, 172, 172);
+  box-shadow: 5px 5px 10px 3px rgba(93, 93, 93, 0.5);
+`
+
+const InputWrapperStyle = styled.div`
+  margin-bottom: 40px;
+
+  & button {
+    padding: 5px;
+    background-color: #0c5a02;
+    width: 40px;
+    font-size: 18px;
+    font-weight: 600;
+
+    &:hover {
+      background-color: #329b01;
+    }
+  }
 `
 
 const TitleStyle = styled.h2`
@@ -92,24 +114,57 @@ const TitleStyle = styled.h2`
   text-align: center;
   font-family: 'Roboto';
   margin: 10px 0 20px;
-  color: #510163;
+  color: #2f025a;
 `
 
 const ItemsStyle = styled.ul`
   margin: 20px 0;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
   margin-bottom: 30px;
 `
 
 const ItemStyle = styled.li`
   font-size: 18px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 5px;
+
+  & span {
+    flex-grow: 1;
+  }
+
+  &:hover {
+    background-color: #cdcdcd;
+  }
+
+  & button {
+    padding: 5px;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #970000;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 10px;
+    margin-left: 10px;
+    font-family: 'Roboto';
+    transition: all 0.5s;
+    border: none;
+
+    &:hover {
+      background-color: #ea6363;
+    }
+  }
 `
 
 const CheckboxStyle = styled.input`
-  height: 15px;
-  width: 15px;
+  height: 18px;
+  width: 18px;
   margin-right: 10px;
 `
 

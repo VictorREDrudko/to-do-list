@@ -20,17 +20,18 @@ export const Button = ({titleBtn, callbackBtn}: ButtonType) => {
 
 // ***********************СТИЛИ***************************
 const ButtonStyled = styled.button`
-  padding: 5px;
-  border-radius: 10px;
+  padding: 10px 5px;
+  border-radius: 5px;
   cursor: pointer;
-  background-color: #d67efc;
-  color: #2c2c2c;
-  min-width: 40px;
+  background-color: #2f025a;
+  color: #fcfcfc;
   margin-right: 10px;
   font-family: 'Roboto';
   transition: all 0.5s;
+  width: 80px;
+  border: none;
 
   &:hover {
-    background-color: #ebbdff;
+    background-color: #2ea3f7;
   }
 `
