@@ -1,15 +1,24 @@
 import styled from "styled-components"
 
+// *******************ТИПИЗАЦИЯ****************************
 type ButtonType = {
   titleBtn: string
+  callbackBtn: ()=>void
 }
 
-export const Button = ({titleBtn}: ButtonType) => {
+
+export const Button = ({titleBtn, callbackBtn}: ButtonType) => {
+  const onClickBtnHandler = () => {
+    callbackBtn();
+  }
+
   return (
-    <ButtonStyled>{titleBtn}</ButtonStyled>
+    <ButtonStyled onClick={onClickBtnHandler}>{titleBtn}</ButtonStyled>
   )
 }
 
+
+// ***********************СТИЛИ***************************
 const ButtonStyled = styled.button`
   padding: 5px;
   border-radius: 10px;

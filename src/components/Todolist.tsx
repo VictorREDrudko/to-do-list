@@ -1,51 +1,82 @@
 import styled from "styled-components"
+import { useState } from "react"
 import { Button } from "./Button"
 
+// *******************ТИПИЗАЦИЯ****************************
+// типизация объекта Todolist (task)
 export type taskType = {
   idTask: number
   titleTask: string,
   isDone: boolean
 }
 
+// типизация Todolist
 type TodolistType = {
   title: string
   tasks: taskType[]
   data?: string
+  deleteTask: (taskId: number)=>void;
 }
 
-export const Todolist = ({title, tasks, data}: TodolistType) => {
-  // Логика
-  const mappedTascs = tasks.map(el => {
+// Типизация фильтрации
+type filteringOption = "all" | "active" | "completed"
+
+
+export const Todolist = ({title, tasks, data, deleteTask}: TodolistType) => {
+  // *********************ЛОГИКА***************************
+  // ЛОКАЛЬНЫЙ useState
+  const [filter, setFilter] = useState<filteringOption>("all");
+
+  // Функция выбора типа фильтрации
+  const changeFilter = (filter: filteringOption) => {
+    setFilter(filter);
+  }
+
+  // Функция проверки и возврата отфильтрованного массива
+  const getFilteredTask = (allTasks: Array<taskType>, filterValue: filteringOption): taskType[] => {
+    if(filterValue === "completed") {
+      return allTasks.filter(el => el.isDone)
+    };
+
+    if(filterValue === "active") {
+      return allTasks.filter(el => !el.isDone)
+    } else {return allTasks};
+  };
+
+  // Отрисовка отфильтрованного tasks
+  const filteredTask: Array<taskType> = getFilteredTask(tasks, filter);
+
+
+  // Отрисовка task из массива данных tasks
+  const mappedTasks = filteredTask.map(el => {
     return (
       <ItemStyle key={el.idTask}>
-        <CheckboxStyle type='checkbox' checked={el.isDone}></CheckboxStyle>
+        <CheckboxStyle type='checkbox' defaultChecked={el.isDone}></CheckboxStyle>
         {el.titleTask}
+        <Button titleBtn="X" callbackBtn={()=> deleteTask(el.idTask)}/>
       </ItemStyle>
     )
-  })
-  
-  // Верстка (разметка)
-  return (
+  });
+
+
+  // **********************Верстка (разметка)********************************
+   return (
     <TodolistStyle>
       <TitleStyle>{title}</TitleStyle>
-      <div>
-        <InputStyle type="text" />
-        <Button titleBtn={"+"}/>
-      </div>
       <ItemsStyle>
-        {tasks.length === 0 ? <div>No tasks</div> : mappedTascs}
+        {tasks.length === 0 ? <div>No tasks</div> : mappedTasks}
       </ItemsStyle>
       <DataStyle>
         <span>{data}</span>
       </DataStyle>
-      <Button titleBtn={"All"}/>
-      <Button titleBtn={"Active"}/>
-      <Button titleBtn={"Completed"}/>
+      <Button titleBtn={"All"} callbackBtn={()=>changeFilter("all")}/>
+      <Button titleBtn={"Active"} callbackBtn={()=>changeFilter("active")}/>
+      <Button titleBtn={"Completed"} callbackBtn={()=>changeFilter("completed")}/>
     </TodolistStyle>
   )
 }
 
-
+  // *********************СТИЛИ***************************
 const TodolistStyle = styled.div`
   background-color: #f5d4fe;
   border-radius: 15px;
@@ -62,15 +93,6 @@ const TitleStyle = styled.h2`
   font-family: 'Roboto';
   margin: 10px 0 20px;
   color: #510163;
-`
-
-const InputStyle = styled.input`
-  height: 30px;
-  width: 200px;
-  border-radius: 10px;
-  margin-right: 10px;
-  padding: 0 10px;
-  font-size: 16px;
 `
 
 const ItemsStyle = styled.ul`
@@ -95,3 +117,8 @@ const DataStyle = styled.div`
   margin-bottom: 10px;
   font-size: 12px;
 `
+
+{/* <div>
+  <Input textInput={textInput} setTextInput={setTextInput}/>
+  <Button titleBtn={"+"} callbackBtn={onClickBtnAddNewTask}/>
+</div> */}
