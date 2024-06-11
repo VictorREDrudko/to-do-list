@@ -1,19 +1,22 @@
 import styled from "styled-components"
+import s from "./Todolist.module.css"
+import { filteringOption } from "./Todolist"
 
 // *******************ТИПИЗАЦИЯ****************************
 type ButtonType = {
   titleBtn: string
   callbackBtn: ()=>void
+  filter?: filteringOption
 }
 
 
-export const Button = ({titleBtn, callbackBtn}: ButtonType) => {
+export const Button = ({titleBtn, callbackBtn, filter}: ButtonType) => {
   const onClickBtnHandler = () => {
     callbackBtn();
   }
 
   return (
-    <ButtonStyled onClick={onClickBtnHandler}>{titleBtn}</ButtonStyled>
+    <ButtonStyled onClick={onClickBtnHandler} className={filter === titleBtn ? s.activeFilter : s.buttonFilter}>{titleBtn}</ButtonStyled>
   )
 }
 
@@ -23,7 +26,6 @@ const ButtonStyled = styled.button`
   padding: 10px 5px;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #2f025a;
   color: #fcfcfc;
   margin-right: 10px;
   font-family: 'Roboto';

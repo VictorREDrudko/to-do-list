@@ -1,12 +1,13 @@
 import styled from "styled-components"
-import { useState } from "react"
+import { ChangeEvent, useRef, useState } from "react"
 import { Button } from "./Button"
 import { Input } from "./Input"
+import s from "./Todolist.module.css"
 
 // *******************ТИПИЗАЦИЯ****************************
 // типизация объекта Todolist (task)
 export type taskType = {
-  idTask: number
+  idTask: string
   titleTask: string,
   isDone: boolean
 }
@@ -16,18 +17,21 @@ type TodolistType = {
   title: string
   tasks: taskType[]
   data?: string
-  deleteTask: (taskId: number)=>void;
+  deleteTask: (taskId: string)=>void
+  addTask: (titleInput: string)=>void
+  changeStatusTask: (id: string, checked: boolean)=>void
 }
 
 // Типизация фильтрации
-type filteringOption = "all" | "active" | "completed"
+export type filteringOption = "all" | "active" | "completed"
 
 
-export const Todolist = ({title, tasks, data, deleteTask}: TodolistType) => {
+export const Todolist = ({title, tasks, data, deleteTask, addTask, changeStatusTask}: TodolistType) => {
   // *********************ЛОГИКА***************************
   // ЛОКАЛЬНЫЙ useState
   const [filter, setFilter] = useState<filteringOption>("all");
   const [textInput, setTextInput] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
   // Функция выбора типа фильтрации
   const changeFilter = (filter: filteringOption) => {
@@ -51,14 +55,24 @@ export const Todolist = ({title, tasks, data, deleteTask}: TodolistType) => {
 
   // Отрисовка task из массива данных tasks
   const mappedTasks = filteredTask.map(el => {
+    const onChangeHundler = (event: ChangeEvent<HTMLInputElement>) => {
+      changeStatusTask(el.idTask, event.currentTarget.checked);
+    }
+
     return (
       <ItemStyle key={el.idTask}>
-        <CheckboxStyle type='checkbox' defaultChecked={el.isDone}></CheckboxStyle>
-        <span>{el.titleTask}</span>
+        <CheckboxStyle type='checkbox' checked={el.isDone} onChange={onChangeHundler}></CheckboxStyle>
+        <span className={el.isDone ? s.completedTask : ''}>{el.titleTask}</span>
         <Button titleBtn="X" callbackBtn={()=> deleteTask(el.idTask)}/>
       </ItemStyle>
     )
   });
+
+  // Функция отправки данных из локального в глобальный state
+  const addTaskHandler = () => {
+    textInput.trim() ? addTask(textInput) : setError("Введите название задачи!");
+    setTextInput('');
+  }
 
 
   // **********************Верстка (разметка)********************************
@@ -66,8 +80,9 @@ export const Todolist = ({title, tasks, data, deleteTask}: TodolistType) => {
     <TodolistStyle>
       <TitleStyle>{title}</TitleStyle>
       <InputWrapperStyle>
-        <Input textInput={textInput} setTextInput={setTextInput}/>
-        <Button titleBtn={"+"} callbackBtn={()=>{}}/>
+        <Input textInput={textInput} setTextInput={setTextInput} addTaskHandler={addTaskHandler}/>
+        <Button titleBtn={"+"} callbackBtn={addTaskHandler}/>
+        <ErrorStyle>{error}</ErrorStyle>
       </InputWrapperStyle>
       <ItemsStyle>
         {tasks.length === 0 ? <div>No tasks</div> : mappedTasks}
@@ -75,14 +90,14 @@ export const Todolist = ({title, tasks, data, deleteTask}: TodolistType) => {
       <DataStyle>
         <span>{data}</span>
       </DataStyle>
-      <Button titleBtn={"All"} callbackBtn={()=>changeFilter("all")}/>
-      <Button titleBtn={"Active"} callbackBtn={()=>changeFilter("active")}/>
-      <Button titleBtn={"Completed"} callbackBtn={()=>changeFilter("completed")}/>
+      <Button titleBtn={"all"} callbackBtn={()=>changeFilter("all")} filter={filter} />
+      <Button titleBtn={"active"} callbackBtn={()=>changeFilter("active")} filter={filter}/>
+      <Button titleBtn={"completed"} callbackBtn={()=>changeFilter("completed")} filter={filter}/>
     </TodolistStyle>
   )
 }
 
-  // *********************СТИЛИ***************************
+  // *********************СТИЛИ******************************************
 const TodolistStyle = styled.div`
   background-color: #e1e1e1;
   border-radius: 15px;
@@ -105,6 +120,10 @@ const InputWrapperStyle = styled.div`
       background-color: #329b01;
     }
   }
+`
+
+const ErrorStyle = styled.div`
+  color: red;
 `
 
 const TitleStyle = styled.h2`

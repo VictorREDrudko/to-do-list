@@ -1,0 +1,12 @@
+.completedTask {
+  opacity: 0.3;
+  text-decoration: line-through;
+}
+
+.activeFilter {
+  background-color: rgb(0, 21, 255);
+}
+
+.buttonFilter {
+  background-color: #2f025a;
+}
