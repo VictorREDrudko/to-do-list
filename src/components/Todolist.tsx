@@ -14,19 +14,20 @@ export type taskType = {
 
 // типизация Todolist
 type TodolistType = {
+  idTodolist: string
   title: string
   tasks: taskType[]
   data?: string
-  deleteTask: (taskId: string)=>void
-  addTask: (titleInput: string)=>void
-  changeStatusTask: (id: string, checked: boolean)=>void
+  deleteTask: (taskId: string, idTodolist: string)=>void
+  addTask: (titleInput: string, idTodolist: string)=>void
+  changeStatusTask: (id: string, checked: boolean, idTodolist: string)=>void
 }
 
 // Типизация фильтрации
 export type filteringOption = "all" | "active" | "completed"
 
 
-export const Todolist = ({title, tasks, data, deleteTask, addTask, changeStatusTask}: TodolistType) => {
+export const Todolist = ({title, tasks, data, idTodolist, deleteTask, addTask, changeStatusTask}: TodolistType) => {
   // *********************ЛОГИКА***************************
   // ЛОКАЛЬНЫЙ useState
   const [filter, setFilter] = useState<filteringOption>("all");
@@ -56,21 +57,21 @@ export const Todolist = ({title, tasks, data, deleteTask, addTask, changeStatusT
   // Отрисовка task из массива данных tasks
   const mappedTasks = filteredTask.map(el => {
     const onChangeHundler = (event: ChangeEvent<HTMLInputElement>) => {
-      changeStatusTask(el.idTask, event.currentTarget.checked);
+      changeStatusTask(el.idTask, event.currentTarget.checked, idTodolist);
     }
 
     return (
       <ItemStyle key={el.idTask}>
         <CheckboxStyle type='checkbox' checked={el.isDone} onChange={onChangeHundler}></CheckboxStyle>
         <span className={el.isDone ? s.completedTask : ''}>{el.titleTask}</span>
-        <Button titleBtn="X" callbackBtn={()=> deleteTask(el.idTask)}/>
+        <Button titleBtn="X" callbackBtn={()=> deleteTask(el.idTask, idTodolist)}/>
       </ItemStyle>
     )
   });
 
   // Функция отправки данных из локального в глобальный state
   const addTaskHandler = () => {
-    textInput.trim() ? addTask(textInput) : setError("Введите название задачи!");
+    textInput.trim() ? addTask(textInput, idTodolist) : setError("Введите название задачи!");
     setTextInput('');
   }
 
@@ -191,8 +192,3 @@ const DataStyle = styled.div`
   margin-bottom: 10px;
   font-size: 12px;
 `
-
-{/* <div>
-  <Input textInput={textInput} setTextInput={setTextInput}/>
-  <Button titleBtn={"+"} callbackBtn={onClickBtnAddNewTask}/>
-</div> */}
