@@ -43,9 +43,9 @@ function App() {
                     {idTask: v1(), titleTask: "React", isDone: false},
                   ],
     [idTodolist2]: [
-                    {idTask: v1(), titleTask: "I need to do sports", isDone: true},
-                    {idTask: v1(), titleTask: "I need to learn frontend development", isDone: false},
-                    {idTask: v1(), titleTask: "I need to change jobs", isDone: false},
+                    {idTask: v1(), titleTask: "To do sports", isDone: true},
+                    {idTask: v1(), titleTask: "To become frontend development", isDone: false},
+                    {idTask: v1(), titleTask: "Change jobs", isDone: false},
                   ],
   })
 
@@ -62,42 +62,50 @@ function App() {
     )
   }
 
-    // Функция добавления task
-    const addTask = (titleInput: string, idTodolist: string) => {
-      const newTask = {
-        idTask: v1(),
-        titleTask: titleInput,
-        isDone: false
-      }
-
-      setTasks({...tasks, [idTodolist]: [newTask, ...tasks[idTodolist]]})
+  // Функция добавления task
+  const addTask = (titleInput: string, idTodolist: string) => {
+    const newTask = {
+      idTask: v1(),
+      titleTask: titleInput,
+      isDone: false
     }
 
-    // Функция изменения статуса (checkbox)
-    const changeStatusTask = (id: string, checked: boolean, idTodolist: string) => {
-      setTasks({...tasks, 
-        [idTodolist]: tasks[idTodolist].map(task => task.idTask === id ? {...task, isDone: checked} : task)
-      })
-    }
+    setTasks({...tasks, [idTodolist]: [newTask, ...tasks[idTodolist]]})
+  }
 
-    // Изменение фильтра todolist
-    const changeFilterTodolist = (filter: filteringOption, idTodolist: string) => {
-      setTodolists(todolists.map(todolist => todolist.idTodolist === idTodolist ? {...todolist, filter: filter} : todolist))
-    }
-
-    // Отрисовка Todolists
-    const mappedTodolist = todolists.map(todolist => {
-      return(
-        <Todolist title={todolist.titleTodolist}
-                idTodolist={todolist.idTodolist}
-                tasks={tasks[todolist.idTodolist]} 
-                data={"01-09.06.2024"} 
-                deleteTask={deleteTask} 
-                addTask={addTask}
-                changeStatusTask={changeStatusTask}/>
-      )
+  // Функция изменения статуса (checkbox)
+  const changeStatusTask = (id: string, checked: boolean, idTodolist: string) => {
+    setTasks({...tasks, 
+      [idTodolist]: tasks[idTodolist].map(task => task.idTask === id ? {...task, isDone: checked} : task)
     })
+  }
+
+  // Изменение фильтра todolist
+  const changeFilterTodolist = (filter: filteringOption, idTodolist: string) => {
+    setTodolists(todolists.map(todolist => todolist.idTodolist === idTodolist ? {...todolist, filter: filter} : todolist))
+  }
+
+  // Удаление Todolist
+  const deleteTodolist = (idTodolist: string) => {
+    setTodolists(todolists.filter(todolist => todolist.idTodolist !== idTodolist))
+  }
+
+  // Отрисовка Todolists
+  const mappedTodolist = todolists.map(todolist => {
+    return(
+      <Todolist key={todolist.idTodolist}
+              title={todolist.titleTodolist}
+              idTodolist={todolist.idTodolist}
+              tasks={tasks[todolist.idTodolist]} 
+              data={"01-09.06.2024"} 
+              deleteTask={deleteTask} 
+              addTask={addTask}
+              changeStatusTask={changeStatusTask}
+              deleteTodolist={deleteTodolist}/>
+    )
+  })
    
+
 
 
 

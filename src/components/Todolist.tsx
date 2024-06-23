@@ -21,13 +21,14 @@ type TodolistType = {
   deleteTask: (taskId: string, idTodolist: string)=>void
   addTask: (titleInput: string, idTodolist: string)=>void
   changeStatusTask: (id: string, checked: boolean, idTodolist: string)=>void
+  deleteTodolist: (idTodolist: string)=>void
 }
 
 // Типизация фильтрации
 export type filteringOption = "all" | "active" | "completed"
 
 
-export const Todolist = ({title, tasks, data, idTodolist, deleteTask, addTask, changeStatusTask}: TodolistType) => {
+export const Todolist = ({title, tasks, data, idTodolist, deleteTask, addTask, deleteTodolist, changeStatusTask}: TodolistType) => {
   // *********************ЛОГИКА***************************
   // ЛОКАЛЬНЫЙ useState
   const [filter, setFilter] = useState<filteringOption>("all");
@@ -75,11 +76,19 @@ export const Todolist = ({title, tasks, data, idTodolist, deleteTask, addTask, c
     setTextInput('');
   }
 
+  // Удаление todolist по клику
+  const deleteTodolistHandler = () => {
+    deleteTodolist(idTodolist)
+  }
+
 
   // **********************Верстка (разметка)********************************
    return (
     <TodolistStyle>
-      <TitleStyle>{title}</TitleStyle>
+      <TitleWrapper>
+        <TitleStyle>{title}</TitleStyle>
+        <Button titleBtn={"X"} callbackBtn={deleteTodolistHandler}/>
+      </TitleWrapper>
       <InputWrapperStyle>
         <Input textInput={textInput} setTextInput={setTextInput} addTaskHandler={addTaskHandler}/>
         <Button titleBtn={"+"} callbackBtn={addTaskHandler}/>
@@ -91,9 +100,11 @@ export const Todolist = ({title, tasks, data, idTodolist, deleteTask, addTask, c
       <DataStyle>
         <span>{data}</span>
       </DataStyle>
-      <Button titleBtn={"all"} callbackBtn={()=>changeFilter("all")} filter={filter} />
-      <Button titleBtn={"active"} callbackBtn={()=>changeFilter("active")} filter={filter}/>
-      <Button titleBtn={"completed"} callbackBtn={()=>changeFilter("completed")} filter={filter}/>
+      <ButtonWrapper>
+        <Button titleBtn={"all"} callbackBtn={()=>changeFilter("all")} filter={filter} />
+        <Button titleBtn={"active"} callbackBtn={()=>changeFilter("active")} filter={filter}/>
+        <Button titleBtn={"completed"} callbackBtn={()=>changeFilter("completed")} filter={filter}/>
+      </ButtonWrapper>
     </TodolistStyle>
   )
 }
@@ -105,6 +116,34 @@ const TodolistStyle = styled.div`
   padding: 10px;
   border: 1px solid rgb(172, 172, 172);
   box-shadow: 5px 5px 10px 3px rgba(93, 93, 93, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+`
+
+const TitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  width: 100%;
+
+    & button {
+    width: 25px;
+    background-color: #970000;
+    color: #ffffff;
+    margin-left: 10px;
+    padding: 5px;
+    border-radius: 50%;
+
+    &:hover {
+      background-color: #ea6363;
+    }
+  }
+
+
 `
 
 const InputWrapperStyle = styled.div`
@@ -133,7 +172,6 @@ const TitleStyle = styled.h2`
   font-weight: 600;
   text-align: center;
   font-family: 'Roboto';
-  margin: 10px 0 20px;
   color: #2f025a;
 `
 
@@ -191,4 +229,9 @@ const CheckboxStyle = styled.input`
 const DataStyle = styled.div`
   margin-bottom: 10px;
   font-size: 12px;
+`
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  margin-bottom: 20px;
 `
