@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './App.css';
 import { Todolist, filteringOption, taskType } from './components/Todolist';
 import { v1 } from 'uuid';
+import { Button } from './components/Button';
+import { AddItemForm } from './components/addItemForm/AddItemForm';
 
 // Типизация входных данных
 type TodolistType = {
@@ -10,7 +12,7 @@ type TodolistType = {
   filter: filteringOption
 }
 
-export type TasksPropsType = {
+type TasksPropsType = {
   [idTodolist: string]: taskType[]
 }
 
@@ -51,7 +53,12 @@ function App() {
 
 
 
-
+  // Добавить новый Todolist
+  const addNewTodolist = (titleInput: string) => {
+    const idTodolist = v1();
+    setTodolists([{idTodolist: idTodolist, titleTodolist: titleInput, filter: "all"}, ...todolists]);
+    setTasks({[idTodolist]: [], ...tasks});
+  }
 
   // Функция удаления task
   const deleteTask = (taskId: string, idTodolist: string) => {
@@ -90,6 +97,17 @@ function App() {
     setTodolists(todolists.filter(todolist => todolist.idTodolist !== idTodolist))
   }
 
+  // Обновление названия task
+  const updateTask = (newTitle: string, idTodolist: string, taskId: string) => {
+    setTasks({...tasks, [idTodolist]: tasks[idTodolist].map(el => el.idTask === taskId ? {...el, titleTask: newTitle} : el)})
+  }
+
+  // Обновление названия todolist
+  const updateTodolist = (newTitle: string, idTodolist: string) => {
+    setTodolists(todolists.map(el => idTodolist === el.idTodolist ? {...el, titleTodolist: newTitle} : el))
+  }
+
+
   // Отрисовка Todolists
   const mappedTodolist = todolists.map(todolist => {
     return(
@@ -101,7 +119,9 @@ function App() {
               deleteTask={deleteTask} 
               addTask={addTask}
               changeStatusTask={changeStatusTask}
-              deleteTodolist={deleteTodolist}/>
+              deleteTodolist={deleteTodolist}
+              updateTask={updateTask}
+              updateTodolist={updateTodolist}/>
     )
   })
    
@@ -112,6 +132,7 @@ function App() {
   // *****************Возврат разместки (верстка)************
   return (
     <div className="App">
+      <AddItemForm addItem={addNewTodolist}/>
       {mappedTodolist}
     </div>
   );

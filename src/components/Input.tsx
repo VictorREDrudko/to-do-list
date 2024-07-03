@@ -12,7 +12,6 @@ export const Input = ({textInput, setTextInput, addTaskHandler}: InputType) => {
   // Вывод текста input
   const onChangeInputHadler = (event: ChangeEvent<HTMLInputElement>) => {
     setTextInput(event.currentTarget.value);
-    console.log(event.currentTarget.value);
   }
 
   const onKeydownInputHandler = (event: KeyboardEvent<HTMLInputElement>) => {
