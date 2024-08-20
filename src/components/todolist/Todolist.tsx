@@ -19,7 +19,7 @@ type PropsType = {
 	removeTask: (taskId: string, todolistId: string) => void
 	changeFilter: (filter: FilterValuesType, todolistId: string) => void
 	addTask: (title: string, todolistId: string) => void
-	changeTaskStatus: (taskId: string, taskStatus: boolean, todolistId: string) => void
+	changeTaskStatus: (todolistId: string, taskId: string, taskStatus: boolean, ) => void
 	filter: FilterValuesType
 	removeTodolist: (todolistId: string) => void
 	updateTitleTask: (todolistId: string, taskId: string, title: string) => void
@@ -58,7 +58,7 @@ export const Todolist = (props: PropsType) => {
 
   // callbacks for tasks
 	const addTaskCallback = (title: string) => {
-		addTask(title, props.todolistId)
+		addTask(props.todolistId, title)
 	}
 
 	return (
@@ -82,7 +82,7 @@ export const Todolist = (props: PropsType) => {
 
 							const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
 								const newStatusValue = e.currentTarget.checked
-								changeTaskStatus(task.id, newStatusValue, todolistId)
+								changeTaskStatus(todolistId, task.id, newStatusValue)
 							}
 
 							const changeTaskTitleHandler = (title: string) => {
