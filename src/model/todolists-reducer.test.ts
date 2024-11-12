@@ -1,65 +1,86 @@
-import {addTodolistAC, changeTodolistFilterAC, changeTodolistTitleAC, removeTodolistAC, todolistsReducer} from './todolists-reducer';
-import {v1} from 'uuid';
-import {FilterValuesType, TodolistType} from '../App';
+import {
+	addTodolistAC,
+	changeTodolistFilterAC,
+	changeTodolistTitleAC,
+	removeTodolistAC,
+	todolistsReducer
+} from './todolists-reducer'
+import {v1} from 'uuid'
+import {TodolistType} from "../App";
 
-// *************Объявление переменных*************
-let todolistId1: string;
-let todolistId2: string;
-let todolistId3: string;
 
-let initialState: Array<TodolistType> = [];
+let startState: TodolistType[]
+let todolistId1 = v1()
+let todolistId2 = v1()
 
-
-// *************Составление beforeEach*************
 beforeEach(() => {
-  todolistId1 = v1();
-  todolistId2 = v1();
-  todolistId3 = v1();
-
-  initialState = [
-    {id: todolistId1, title: 'What to learn', filter: 'all'},
-    {id: todolistId2, title: 'What to buy', filter: 'all'}
-  ]
+  return startState = [
+		{id: todolistId1, title: 'What to learn', filter: 'all'},
+		{id: todolistId2, title: 'What to buy', filter: 'all'}
+	]
 })
 
 
-// *************Тесты*************
-// Test 1 add todolist
-test('new todolist should be add', () => {
-  const title: string = 'This is a new Todolist'
-  const newState = todolistsReducer(initialState, addTodolistAC(todolistId3, title));
 
-  // Проверим длину нового массива, чему равны id и title добавленного Todo
-  expect(newState.length).toBe(3);
-  expect(newState[0].id).toBeDefined();
-  expect(newState[0].title).toBe(title);
+test('correct todolist should be removed', () => {
+	// let todolistId1 = v1()
+	// let todolistId2 = v1()
+
+	// // 1. Стартовый state
+	// const startState: TodolistType[] = [
+	// 	{id: todolistId1, title: 'What to learn', filter: 'all'},
+	// 	{id: todolistId2, title: 'What to buy', filter: 'all'}
+	// ]
+
+	// 2. Действие
+	const endState = todolistsReducer(startState, removeTodolistAC(todolistId1))
+
+	// 3. Проверяем, что наши действия (изменения state) соответствуют ожиданию
+	// в массиве останется один тудулист
+	expect(endState.length).toBe(1)
+	// удалится нужный тудулист, а не любой
+	expect(endState[0].id).toBe(todolistId2)
 })
 
-// Test 2 remove todolist
-test('todolist should be remove', () => {
-  const newState = todolistsReducer(initialState, removeTodolistAC(todolistId1))
 
-  // Проверим длину нового массива и чему равна его id
-  expect(newState.length).toBe(1);
-  expect(newState[0].id).toBe(todolistId2)
+
+
+
+test('correct todolist should be added', () => {
+
+	const newTitle = 'New Todolist'
+
+	const endState = todolistsReducer(startState, addTodolistAC(newTitle))
+
+	expect(endState.length).toBe(3)
+	expect(endState[2].title).toBe(newTitle)
 })
 
-// Test 3 change title todolist
-test('Title todolist should be change', () => {
-  const newTitle = 'This is a new title';
-  const newState = todolistsReducer(initialState, changeTodolistTitleAC(todolistId2, newTitle));
 
-  // Проверим чему равны title 
-  expect(newState[1].title).toBe(newTitle);
-  expect(newState[0].title).toBe('What to learn');
+
+
+
+test('correct todolist should change its name', () => {
+
+	const newTitle = 'New Todolist'
+
+	const endState = todolistsReducer(startState, changeTodolistTitleAC({id: todolistId2, title: newTitle}))
+
+	expect(endState[0].title).toBe('What to learn')
+	expect(endState[1].title).toBe(newTitle)
 })
 
-// Test 4 change filter todolist
-test('filter should de change', () => {
-  const newFilter: FilterValuesType = 'completed';
-  const newState = todolistsReducer(initialState, changeTodolistFilterAC(todolistId2, newFilter));
 
-  expect(newState[0].filter).toBe('all');
-  expect(newState[1].filter).toBe(newFilter);
+
+
+
+test('correct filter of todolist should be changed', () => {
+
+	const newFilter = 'completed'
+
+	const endState = todolistsReducer(startState, changeTodolistFilterAC({id: todolistId2, filter: newFilter}))
+
+	expect(endState[0].filter).toBe('all')
+	expect(endState[1].filter).toBe(newFilter)
 })
 

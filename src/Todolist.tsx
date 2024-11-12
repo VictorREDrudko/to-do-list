@@ -1,7 +1,7 @@
-import {FilterValuesType, TaskType} from "../../App";
+import {FilterValuesType, TaskType} from "./App";
 import {ChangeEvent} from "react";
-import {AddItemForm} from "../AddItemForm";
-import {EditableSpan} from "../EditableSpan";
+import {AddItemForm} from "./AddItemForm";
+import {EditableSpan} from "./EditableSpan";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from "@mui/material/Button";
@@ -11,7 +11,7 @@ import ListItem from '@mui/material/ListItem';
 import Box from "@mui/material/Box";
 import {filterButtonsContainerSx, getListItemSx} from "./Todolist.styles";
 
-// Type
+
 type PropsType = {
 	title: string
 	todolistId: string
@@ -19,16 +19,14 @@ type PropsType = {
 	removeTask: (taskId: string, todolistId: string) => void
 	changeFilter: (filter: FilterValuesType, todolistId: string) => void
 	addTask: (title: string, todolistId: string) => void
-	changeTaskStatus: (todolistId: string, taskId: string, taskStatus: boolean, ) => void
+	changeTaskStatus: (taskId: string, taskStatus: boolean, todolistId: string) => void
 	filter: FilterValuesType
 	removeTodolist: (todolistId: string) => void
-	updateTitleTask: (todolistId: string, taskId: string, title: string) => void
-	updateTitleTodolist: (todolistId: string, title: string) => void
+	updateTask: (todolistId: string, taskId: string, title: string) => void
+	updateTodolist: (todolistId: string, title: string) => void
 }
 
-
 export const Todolist = (props: PropsType) => {
-  // Деструктуризация пропсов
 	const {
 		title,
 		tasks,
@@ -39,26 +37,24 @@ export const Todolist = (props: PropsType) => {
 		changeTaskStatus,
 		todolistId,
 		removeTodolist,
-		updateTitleTask,
-		updateTitleTodolist
+		updateTask,
+		updateTodolist
 	} = props
 
-  // callbacks for todolist
+	const changeFilterTasksHandler = (filter: FilterValuesType) => {
+		changeFilter(filter, props.todolistId)
+	}
+
 	const removeTodolistHandler = () => {
 		removeTodolist(todolistId)
 	}
 
-  const updateTodolistHandler = (title: string) => {
-		updateTitleTodolist(props.todolistId, title)
-	}
-
-  const changeFilterTasksHandler = (filter: FilterValuesType) => {
-		changeFilter(filter, props.todolistId)
-	}
-
-  // callbacks for tasks
 	const addTaskCallback = (title: string) => {
-		addTask(props.todolistId, title)
+		addTask(title, props.todolistId)
+	}
+
+	const updateTodolistHandler = (title: string) => {
+		updateTodolist(props.todolistId, title)
 	}
 
 	return (
@@ -82,11 +78,11 @@ export const Todolist = (props: PropsType) => {
 
 							const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
 								const newStatusValue = e.currentTarget.checked
-								changeTaskStatus(todolistId, task.id, newStatusValue)
+								changeTaskStatus(task.id, newStatusValue, todolistId)
 							}
 
 							const changeTaskTitleHandler = (title: string) => {
-								updateTitleTask(todolistId, task.id, title)
+								updateTask(todolistId, task.id, title)
 							}
 							return <ListItem key={task.id} sx={getListItemSx(task.isDone)}>
 								<div>
@@ -102,21 +98,20 @@ export const Todolist = (props: PropsType) => {
 			}
 			<Box sx={filterButtonsContainerSx}>
 				<Button
-					variant={filter === 'all' ? 'contained' : 'outlined'}
-					color={'primary'}
+					variant={filter === 'all' ? 'outlined' : 'text'}
+					color={'inherit'}
 					onClick={() => changeFilterTasksHandler('all')}>
 					All
 				</Button>
 				<Button
-					variant={filter === 'active' ? 'contained' : 'outlined'}
+					variant={filter === 'active' ? 'outlined' : 'text'}
 					color={'primary'}
-          sx={{m: '0px 15px'}}
 					onClick={() => changeFilterTasksHandler('active')}>
 					Active
 				</Button>
 				<Button
-					variant={filter === 'completed' ? 'contained' : 'outlined'}
-					color={'primary'}
+					variant={filter === 'completed' ? 'outlined' : 'text'}
+					color={'secondary'}
 					onClick={() => changeFilterTasksHandler('completed')}>
 					Completed
 				</Button>
