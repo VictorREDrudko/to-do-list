@@ -1,25 +1,20 @@
-import {FilterValuesType, TodolistType} from "../app/App";
 import {v1} from "uuid";
-
-
-// let todolistID1 = v1()
-// let todolistID2 = v1()
-
-// const initialState: TodolistType[] = [
-// 	{id: todolistID1, title: 'What to learn', filter: 'all'},
-// 	{id: todolistID2, title: 'What to buy', filter: 'all'},
-// ]
+import { FilterValuesType, TodolistType } from "../../../app/App";
 
 const initialState: TodolistType[] = []
 
-export const todolistsReducer = (state = initialState, action: ActionsType) => {
+export const todolistsReducer = (state: TodolistType[] = initialState, action: ActionsType): TodolistType[] => {
 	switch (action.type) {
 		case 'REMOVE-TODOLIST': {
 			return state.filter(tl => tl.id !== action.payload.id)
 		}
 
 		case 'ADD-TODOLIST': {
-			const newTodolist: TodolistType = {id: action.payload.todolistId, title: action.payload.title, filter: 'all'}
+			const newTodolist: TodolistType = {
+				id: action.payload.todolistId,
+				title: action.payload.title,
+				filter: 'all'
+			}
 			return [...state, newTodolist]
 		}
 
@@ -37,19 +32,19 @@ export const todolistsReducer = (state = initialState, action: ActionsType) => {
 }
 
 // Action creators
-export const removeTodolistAC = (todolistId: string) => {
-	return {type: 'REMOVE-TODOLIST', payload: {id: todolistId}} as const
+export const removeTodolistAC = (id: string) => {
+	return {type: 'REMOVE-TODOLIST', payload: {id}} as const
 }
 
 export const addTodolistAC = (title: string) => {
 	return {type: 'ADD-TODOLIST', payload: {title, todolistId: v1()}} as const
 };
 
-export const changeTodolistTitleAC = (payload: {id: string, title: string}) => {
+export const changeTodolistTitleAC = (payload: { id: string, title: string }) => {
 	return {type: 'CHANGE-TODOLIST-TITLE', payload} as const
 };
 
-export const changeTodolistFilterAC = (payload: {id: string, filter: FilterValuesType}) => {
+export const changeTodolistFilterAC = (payload: { id: string, filter: FilterValuesType }) => {
 	return {type: 'CHANGE-TODOLIST-FILTER', payload} as const
 }
 
