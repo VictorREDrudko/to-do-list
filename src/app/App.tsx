@@ -1,43 +1,23 @@
 import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider } from '@mui/material/styles';
-import { Header } from "../common/components/header/Header";
-import { getThemeMode } from '../common/theme';
-import { selectTheme } from "./appSelectors";
-import { useAppSelector } from "./hooks";
-import { Main } from "./Main";
+import {ThemeProvider} from '@mui/material/styles';
+import React from "react";
+import {Header} from "../common/components/Header/Header";
+import {useAppSelector} from "../common/hooks/useAppSelector";
+import {getTheme} from "../common/theme/theme";
+import {selectThemeMode} from "./appSelectors";
+import {Main} from "./Main";
 
-// ALT+SCHIFT+O - удаление неиспользованных import
+export const App = () => {
 
-export type TaskType = {
-	id: string
-	title: string
-	isDone: boolean
-}
-
-export type FilterValuesType = 'all' | 'active' | 'completed'
-
-export type TodolistType = {
-	id: string
-	title: string
-	filter: FilterValuesType
-}
-
-export type TasksStateType = {
-	[key: string]: TaskType[]
-}
-
-
-function App() {
-  const themeMode = useAppSelector(selectTheme)
-  const theme = getThemeMode(themeMode)
+	const themeMode = useAppSelector(selectThemeMode)
 
 	return (
-		<ThemeProvider theme={theme}>
+		<ThemeProvider theme={getTheme(themeMode)}>
 			<CssBaseline/>
-      <Header/>
-      <Main/>
+			<Header/>
+			<Main/>
 		</ThemeProvider>
 	);
 }
 
-export default App;
+

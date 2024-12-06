@@ -1,29 +1,29 @@
-import { TodolistType } from "../../../../../app/App";
-import { useAppDispatch } from "../../../../../app/hooks";
-import { AddItemForm } from "../../../../../common/components/additemForm/AddItemForm";
-import { addTaskAC } from "../../../model/tasks-reducer";
-import { FilterTasksButtons } from "./filterTasksButton/FilterTasksButtons";
-import { Tasks } from "./tasks/Tasks";
-import { TodolistTitle } from "./todolistTitle/TodolistTitle";
+import {AddItemForm} from "../../../../../common/components/AddItemForm/AddItemForm";
+import {useAppDispatch} from "../../../../../common/hooks/useAppDispatch";
+import {addTaskAC} from "../../../model/tasks-reducer";
+import {TodolistType} from "../../../model/todolists-reducer";
+import {FilterTasksButtons} from "./FilterTasksButtons/FilterTasksButtons";
+import {Tasks} from "./Tasks/Tasks";
+import {TodolistTitle} from "./TodolistTitle/TodolistTitle";
 
-
-type PropsType = {
-  todolist: TodolistType,
+type Props = {
+	todolist: TodolistType
 }
 
-export const Todolist = ({todolist} : PropsType) => {
-  const dispatch = useAppDispatch();
+export const Todolist = ({todolist}: Props) => {
 
-  const addTask = (title: string) => {
+	const dispatch = useAppDispatch()
+
+	const addTaskCallback = (title: string) => {
 		dispatch(addTaskAC({title, todolistId: todolist.id}))
 	}
 
 	return (
-		<div>
-      <TodolistTitle todolist={todolist}/>
-			<AddItemForm addItem={addTask}/>
-      <Tasks todolist={todolist}/>
-      <FilterTasksButtons todolist={todolist}/>
-		</div>
+		<>
+			<TodolistTitle todolist={todolist}/>
+			<AddItemForm addItem={addTaskCallback}/>
+			<Tasks todolist={todolist}/>
+			<FilterTasksButtons todolist={todolist}/>
+		</>
 	)
 }
