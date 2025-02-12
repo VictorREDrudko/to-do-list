@@ -1,26 +1,27 @@
 import { AddItemForm } from "common/components"
 import { useAppDispatch } from "common/hooks"
-import { addTasksTC } from "../../../model/tasks-reducer"
-import { DomenTodolist } from "../../../model/todolists-reducer"
+import { addTaskTC } from "../../../model/tasksSlice"
+import { DomainTodolist } from "../../../model/todolistsSlice"
+
 import { FilterTasksButtons } from "./FilterTasksButtons/FilterTasksButtons"
 import { Tasks } from "./Tasks/Tasks"
 import { TodolistTitle } from "./TodolistTitle/TodolistTitle"
 
 type Props = {
-  todolist: DomenTodolist
+  todolist: DomainTodolist
 }
 
 export const Todolist = ({ todolist }: Props) => {
   const dispatch = useAppDispatch()
 
   const addTaskCallback = (title: string) => {
-    dispatch(addTasksTC({ title, todolistId: todolist.id }))
+    dispatch(addTaskTC({ title, todolistId: todolist.id }))
   }
 
   return (
     <>
       <TodolistTitle todolist={todolist} />
-      <AddItemForm addItem={addTaskCallback} />
+      <AddItemForm addItem={addTaskCallback} disabled={todolist.entityStatus === "loading"} />
       <Tasks todolist={todolist} />
       <FilterTasksButtons todolist={todolist} />
     </>

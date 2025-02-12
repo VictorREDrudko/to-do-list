@@ -1,27 +1,31 @@
-import { Todolist } from "features/todolists/api/todolistsApi.types"
-import { tasksReducer, TasksStateType } from "../tasks-reducer"
-import { addTodolistAC, DomenTodolist, todolistsReducer } from "../todolists-reducer"
+import { Todolist } from "../../api/todolistsApi.types";
+import { tasksReducer, TasksStateType } from "../tasksSlice";
+import {
+  addTodolistAC,
+  DomainTodolist,
+  todolistsReducer,
+} from "../todolistsSlice";
 
 test("ids should be equals", () => {
-  const startTasksState: TasksStateType = {}
-  const startTodolistsState: DomenTodolist[] = []
+  const startTasksState: TasksStateType = {};
+  const startTodolistsState: DomainTodolist[] = [];
 
   const todolist: Todolist = {
     title: "new todolist",
     id: "any id",
     addedDate: "",
     order: 0,
-  }
+  };
 
-  const action = addTodolistAC({title: todolist.title, todolistId: todolist.id})
+  const action = addTodolistAC(todolist);
 
-  const endTasksState = tasksReducer(startTasksState, action)
-  const endTodolistsState = todolistsReducer(startTodolistsState, action)
+  const endTasksState = tasksReducer(startTasksState, action);
+  const endTodolistsState = todolistsReducer(startTodolistsState, action);
 
-  const keys = Object.keys(endTasksState)
-  const idFromTasks = keys[0]
-  const idFromTodolists = endTodolistsState[0].id
+  const keys = Object.keys(endTasksState);
+  const idFromTasks = keys[0];
+  const idFromTodolists = endTodolistsState[0].id;
 
-  expect(idFromTasks).toBe(action.payload.todolistId)
-  expect(idFromTodolists).toBe(action.payload.todolistId)
-})
+  expect(idFromTasks).toBe(action.payload.todolist.id);
+  expect(idFromTodolists).toBe(action.payload.todolist.id);
+});

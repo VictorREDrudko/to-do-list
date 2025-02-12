@@ -1,19 +1,19 @@
 import List from "@mui/material/List"
-import { useAppSelector } from "common/hooks/useAppSelector"
-import { selectTasks } from "../../../../model/tasksSelectors"
-import { DomenTodolist } from "../../../../model/todolists-reducer"
-import { Task } from "./Task/Task"
 import { useEffect } from "react"
-import { useAppDispatch } from "common/hooks"
 import { TaskStatus } from "common/enums"
-import { fetchTasksTC } from "features/todolists/model/tasks-reducer"
+import { useAppDispatch, useAppSelector } from "common/hooks"
+import { fetchTasksTC } from "../../../../model/tasksSlice"
+import { selectTasks } from "../../../../model/tasksSelectors"
+import { DomainTodolist } from "../../../../model/todolistsSlice"
+import { Task } from "./Task/Task"
 
 type Props = {
-  todolist: DomenTodolist
+  todolist: DomainTodolist
 }
 
 export const Tasks = ({ todolist }: Props) => {
   const tasks = useAppSelector(selectTasks)
+
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -34,14 +34,12 @@ export const Tasks = ({ todolist }: Props) => {
 
   return (
     <>
-      {/* вариант защиты от undefined с помощью оператора &&*/}
-      {tasksForTodolist && tasksForTodolist.length === 0 ? (
+      {tasksForTodolist?.length === 0 ? (
         <p>Тасок нет</p>
       ) : (
         <List>
-          {/* вариант защиты от undefined с помощью оператора функциональности ?*/}
           {tasksForTodolist?.map((task) => {
-            return <Task task={task} todolist={todolist} />
+            return <Task key={task.id} task={task} todolist={todolist} />
           })}
         </List>
       )}
